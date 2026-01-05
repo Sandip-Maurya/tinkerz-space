@@ -1,0 +1,78 @@
+---
+---
+
+<section class="section-padding bg-dark-blue relative overflow-hidden">
+  <div class="container-max">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <!-- Robot Icon Placeholder -->
+      <div class="fade-in flex justify-center lg:justify-start">
+        <div class="w-64 h-64 bg-cyan/20 border-2 border-cyan/50 rounded-lg flex items-center justify-center">
+          <svg class="w-48 h-48 text-cyan/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+          </svg>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="fade-in">
+        <h2 class="text-4xl md:text-5xl font-black mb-8 text-white">
+          WHY NOW
+        </h2>
+        
+        <div class="bg-cyan/10 border border-cyan/30 rounded-lg p-6 md:p-8 space-y-6">
+          <div>
+            <h3 class="text-cyan text-xl font-bold mb-3">NEP 2020 mandates:</h3>
+            <ul class="space-y-2 text-white/90">
+              <li class="flex items-start">
+                <span class="text-cyan mr-2 mt-1">•</span>
+                <span>Experiential & project-based learning</span>
+              </li>
+              <li class="flex items-start">
+                <span class="text-cyan mr-2 mt-1">•</span>
+                <span>Coding, AI, Robotics at early stages</span>
+              </li>
+            </ul>
+          </div>
+          
+          <div>
+            <h3 class="text-cyan text-xl font-bold mb-3">Rising demand for:</h3>
+            <ul class="space-y-2 text-white/90">
+              <li class="flex items-start">
+                <span class="text-cyan mr-2 mt-1">•</span>
+                <span>STEM education</span>
+              </li>
+              <li class="flex items-start">
+                <span class="text-cyan mr-2 mt-1">•</span>
+                <span>Maker spaces</span>
+              </li>
+              <li class="flex items-start">
+                <span class="text-cyan mr-2 mt-1">•</span>
+                <span>Skill-based after-school programs</span>
+              </li>
+            </ul>
+          </div>
+          
+          <p class="text-white/90 text-lg font-semibold">
+            Parents actively seeking future-ready learning
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const fadeElements = document.querySelectorAll('.fade-in');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.2 });
+
+    fadeElements.forEach(el => observer.observe(el));
+  });
+</script>
+

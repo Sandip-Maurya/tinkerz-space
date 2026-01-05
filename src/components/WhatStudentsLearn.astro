@@ -1,0 +1,68 @@
+---
+const topics = [
+  'Robotics',
+  'Drone Technology',
+  'Space Technology',
+  'Python Programming',
+  'Artificial Intelligence',
+  '3D Printing and CAD',
+  'Sensors, IOT & Electronics',
+  'Research, Innovation & Project Building',
+];
+---
+
+<section class="section-padding bg-dark-blue-light relative overflow-hidden">
+  <div class="container-max">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <!-- Topics List -->
+      <div class="fade-in">
+        <h2 class="text-4xl md:text-5xl font-black mb-8 text-white">
+          WHAT STUDENTS WILL LEARN
+        </h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {topics.map((topic, index) => (
+            <div class="flex items-center bg-dark-blue border border-cyan/30 rounded-lg p-4 hover:border-cyan/60 transition-all">
+              <div class="w-12 h-12 bg-cyan/20 border-2 border-cyan/50 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
+                <span class="text-cyan font-bold">{String(index + 1).padStart(2, '0')}</span>
+              </div>
+              <p class="text-white/90 font-medium text-lg">
+                {topic}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Image Placeholder -->
+      <div class="fade-in">
+        <div class="relative rounded-lg overflow-hidden border-2 border-cyan/30">
+          <div class="aspect-[4/3] bg-gradient-to-br from-cyan/20 to-dark-blue flex items-center justify-center">
+            <div class="text-center p-8">
+              <svg class="w-24 h-24 mx-auto mb-4 text-cyan/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+              </svg>
+              <p class="text-white/50 text-sm">Hands-on learning experience</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const fadeElements = document.querySelectorAll('.fade-in');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.2 });
+
+    fadeElements.forEach(el => observer.observe(el));
+  });
+</script>
+

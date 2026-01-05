@@ -1,11 +1,31 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import Hero from '../components/Hero.astro';
+import Vision from '../components/Vision.astro';
+import Problem from '../components/Problem.astro';
+import WhoWeAre from '../components/WhoWeAre.astro';
+import Objectives from '../components/Objectives.astro';
+import TechnologyDomains from '../components/TechnologyDomains.astro';
+import Facilities from '../components/Facilities.astro';
+import WhatStudentsLearn from '../components/WhatStudentsLearn.astro';
+import WhyNow from '../components/WhyNow.astro';
+import Testimonials from '../components/Testimonials.astro';
+import Contact from '../components/Contact.astro';
 ---
 
-<Layout>
-	<Welcome />
+<Layout 
+	title="Tinkerz Space - Future Tech & Innovation Maker Space"
+	description="A cutting-edge Maker Space where students learn by doing. Explore, Create, Innovate with Robotics, AI, Drone Tech, and Space Tech."
+>
+	<Hero />
+	<Vision />
+	<Problem />
+	<WhoWeAre />
+	<Objectives />
+	<TechnologyDomains />
+	<Facilities />
+	<WhatStudentsLearn />
+	<WhyNow />
+	<Testimonials />
+	<Contact />
 </Layout>

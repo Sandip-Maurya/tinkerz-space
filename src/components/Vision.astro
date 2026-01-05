@@ -1,0 +1,64 @@
+---
+---
+
+<section id="about" class="section-padding bg-dark-blue-light relative overflow-hidden">
+  <div class="container-max">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <!-- Text Content -->
+      <div class="fade-in">
+        <h2 class="text-4xl md:text-5xl font-black mb-6 text-white">
+          VISION
+        </h2>
+        
+        <div class="space-y-6 text-white/90 text-lg leading-relaxed">
+          <p>
+            To build a vibrant, dynamic space where young minds, students from Grade 1 to 12 (ages 6-18), 
+            Undergraduates, Innovators & Hobbyists explore, invent, and innovate through real-world 
+            applications of Robotics, AI, Drone Tech, and Space Tech, guided by strong mentorship, 
+            project-based learning.
+          </p>
+          
+          <p>
+            To nurture a thriving community of tinkerers, builders, and problem solvers who grow into 
+            confident creators and future tech entrepreneurs.
+          </p>
+          
+          <p class="text-cyan text-xl font-semibold italic">
+            Tinkerz Space is where the next generation of Elon Musks, Steve Jobs, Jensen Huangs and 
+            Bill Gates will begin their journey.
+          </p>
+        </div>
+      </div>
+
+      <!-- Image Placeholder -->
+      <div class="fade-in">
+        <div class="relative rounded-lg overflow-hidden border-2 border-cyan/30">
+          <div class="aspect-[4/3] bg-gradient-to-br from-cyan/20 to-dark-blue flex items-center justify-center">
+            <div class="text-center p-8">
+              <svg class="w-24 h-24 mx-auto mb-4 text-cyan/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+              </svg>
+              <p class="text-white/50 text-sm">Student working on electronics</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const fadeElements = document.querySelectorAll('#about .fade-in');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.2 });
+
+    fadeElements.forEach(el => observer.observe(el));
+  });
+</script>
+

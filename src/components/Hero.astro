@@ -1,0 +1,73 @@
+---
+---
+
+<section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden pt-16 md:pt-20">
+  <!-- Animated Background -->
+  <div class="absolute inset-0 network-pattern opacity-20"></div>
+  <div class="absolute inset-0 bg-gradient-to-b from-dark-blue via-dark-blue-light to-dark-blue"></div>
+  
+  <!-- Content -->
+  <div class="relative z-10 container-max section-padding text-center">
+    <div class="fade-in max-w-5xl mx-auto">
+      <h1 class="text-4xl md:text-6xl lg:text-7xl font-black mb-6 leading-tight">
+        <span class="text-white">FUTURE TECH &</span><br />
+        <span class="text-gradient">INNOVATION</span><br />
+        <span class="text-white">MAKER SPACE</span>
+      </h1>
+      
+      <p class="text-cyan text-lg md:text-xl mb-4 font-semibold tracking-wider">
+        EXPLORE • CREATE • INNOVATE
+      </p>
+      
+      <p class="text-white/80 text-lg md:text-xl mb-10 max-w-3xl mx-auto leading-relaxed">
+        Empowering young minds from Grade 1 to 12, Undergraduates, Innovators & Hobbyists to explore, 
+        invent, and innovate through real-world applications of Robotics, AI, Drone Tech, and Space Tech.
+      </p>
+      
+      <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+        <a 
+          href="#contact" 
+          class="px-8 py-4 bg-cyan text-dark-blue font-bold rounded-lg hover:bg-cyan-light transition-all transform hover:scale-105 shadow-lg shadow-cyan/30"
+        >
+          Get Started
+        </a>
+        <a 
+          href="#about" 
+          class="px-8 py-4 border-2 border-cyan text-cyan font-bold rounded-lg hover:bg-cyan/10 transition-all"
+        >
+          Learn More
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll Indicator -->
+  <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+    <svg class="w-6 h-6 text-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+    </svg>
+  </div>
+</section>
+
+<script>
+  // Fade in animation on load
+  document.addEventListener('DOMContentLoaded', () => {
+    const fadeElements = document.querySelectorAll('.fade-in');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    fadeElements.forEach(el => observer.observe(el));
+    
+    // Trigger immediately for hero
+    const heroFade = document.querySelector('#home .fade-in');
+    if (heroFade) {
+      setTimeout(() => heroFade.classList.add('visible'), 100);
+    }
+  });
+</script>
+
