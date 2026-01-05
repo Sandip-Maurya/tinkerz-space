@@ -6,6 +6,6 @@ import tailwind from '@astrojs/tailwind';
 export default defineConfig({
 	integrations: [tailwind()],
 	output: 'static',
-	site: 'https://Sandip-Maurya.github.io',
-	base: '/tinkerz-space',
+	site: 'https://tinkerzspace.com',
+	base: '/',
 });
