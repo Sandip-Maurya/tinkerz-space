@@ -1,0 +1,208 @@
+---
+interface Props {
+  src?: string | null; // Fallback/single image (for backward compatibility)
+  srcMobile?: string | null;
+  srcTablet?: string | null;
+  srcLaptop?: string | null;
+  alt?: string;
+  placeholderText?: string;
+  placeholderIcon?: 'book' | 'building' | 'filter' | 'lightbulb' | 'default';
+  maxHeight?: string;
+  aspectRatio?: string; // Default for all breakpoints (fallback)
+  aspectRatioMobile?: string;
+  aspectRatioTablet?: string;
+  aspectRatioLaptop?: string;
+  preferredAspectRatio?: 'portrait' | 'landscape' | 'square' | 'auto';
+  containerClass?: string;
+}
+
+const {
+  src,
+  srcMobile,
+  srcTablet,
+  srcLaptop,
+  alt = '',
+  placeholderText = 'Image placeholder',
+  placeholderIcon = 'default',
+  maxHeight = 'max-h-[400px] md:max-h-[500px] lg:max-h-[800px]',
+  aspectRatio,
+  aspectRatioMobile,
+  aspectRatioTablet,
+  aspectRatioLaptop,
+  preferredAspectRatio = 'auto',
+  containerClass = '',
+} = Astro.props;
+
+// Determine if we have responsive images or single image
+const hasResponsiveImages = srcMobile || srcTablet || srcLaptop;
+const hasSingleImage = src && src.trim() !== '';
+const hasImage = hasResponsiveImages || hasSingleImage;
+
+// Get fallback image for <img> tag - prioritize src, then responsive images
+const fallbackSrc = src || srcLaptop || srcTablet || srcMobile;
+
+// Determine aspect ratios for each breakpoint
+const getAspectRatio = (breakpoint?: string) => {
+  if (breakpoint === 'mobile' && aspectRatioMobile) return aspectRatioMobile;
+  if (breakpoint === 'tablet' && aspectRatioTablet) return aspectRatioTablet;
+  if (breakpoint === 'laptop' && aspectRatioLaptop) return aspectRatioLaptop;
+  if (aspectRatio) return aspectRatio;
+  if (preferredAspectRatio !== 'auto') {
+    switch (preferredAspectRatio) {
+      case 'portrait':
+        return '3/4';
+      case 'landscape':
+        return '16/9';
+      case 'square':
+        return '1/1';
+    }
+  }
+  return undefined;
+};
+
+const mobileAspectRatio = getAspectRatio('mobile');
+const tabletAspectRatio = getAspectRatio('tablet');
+const laptopAspectRatio = getAspectRatio('laptop');
+const defaultAspectRatio = getAspectRatio();
+
+// Build CSS aspect ratio classes for responsive breakpoints
+const aspectRatioClasses = [];
+if (mobileAspectRatio) aspectRatioClasses.push(`aspect-[${mobileAspectRatio}]`);
+if (tabletAspectRatio) aspectRatioClasses.push(`md:aspect-[${tabletAspectRatio}]`);
+if (laptopAspectRatio) aspectRatioClasses.push(`lg:aspect-[${laptopAspectRatio}]`);
+
+const aspectRatioClass = aspectRatioClasses.length > 0 
+  ? aspectRatioClasses.join(' ') 
+  : defaultAspectRatio 
+    ? `aspect-[${defaultAspectRatio}]` 
+    : '';
+
+const placeholderAspectRatio = defaultAspectRatio 
+  ? `aspect-[${defaultAspectRatio}]` 
+  : 'aspect-[4/3]';
+---
+
+<div class={`relative rounded-lg overflow-hidden border-2 border-cyan/30 bg-dark-blue/50 ${containerClass}`}>
+  {hasImage ? (
+    <div 
+      class={`relative w-full ${maxHeight} ${aspectRatioClass || ''}`}
+      data-image-wrapper="true"
+    >
+      {hasResponsiveImages ? (
+        <picture>
+          {/* Mobile image */}
+          {srcMobile && (
+            <source 
+              media="(max-width: 767px)" 
+              srcset={srcMobile}
+              type={srcMobile.endsWith('.jpg') || srcMobile.endsWith('.jpeg') ? 'image/jpeg' : 'image/png'}
+            />
+          )}
+          {/* Tablet image */}
+          {srcTablet && (
+            <source 
+              media="(min-width: 768px) and (max-width: 1023px)" 
+              srcset={srcTablet}
+              type={srcTablet.endsWith('.jpg') || srcTablet.endsWith('.jpeg') ? 'image/jpeg' : 'image/png'}
+            />
+          )}
+          {/* Laptop image */}
+          {srcLaptop && (
+            <source 
+              media="(min-width: 1024px)" 
+              srcset={srcLaptop}
+              type={srcLaptop.endsWith('.jpg') || srcLaptop.endsWith('.jpeg') ? 'image/jpeg' : 'image/png'}
+            />
+          )}
+          {/* Fallback image */}
+          <img 
+            src={fallbackSrc!}
+            alt={alt}
+            class="w-full h-full object-cover"
+            loading="lazy"
+            data-image-container="true"
+          />
+        </picture>
+      ) : (
+        <img 
+          src={src!}
+          alt={alt}
+          class="w-full h-full object-cover"
+          loading="lazy"
+          data-image-container="true"
+        />
+      )}
+      <!-- Fallback placeholder (hidden by default, shown on error) -->
+      <div 
+        class="hidden absolute inset-0 bg-gradient-to-br from-cyan/20 to-dark-blue-light flex items-center justify-center"
+        data-placeholder="true"
+      >
+        <div class="text-center p-8">
+          <svg class="w-24 h-24 mx-auto mb-4 text-cyan/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            {placeholderIcon === 'book' && (
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+            )}
+            {placeholderIcon === 'building' && (
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+            )}
+            {placeholderIcon === 'filter' && (
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+            )}
+            {placeholderIcon === 'lightbulb' && (
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+            )}
+            {(placeholderIcon === 'default' || !['book', 'building', 'filter', 'lightbulb'].includes(placeholderIcon)) && (
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            )}
+          </svg>
+          <p class="text-white/50 text-sm">{placeholderText}</p>
+        </div>
+      </div>
+    </div>
+  ) : (
+    <div class={`${placeholderAspectRatio} bg-gradient-to-br from-cyan/20 to-dark-blue-light flex items-center justify-center`}>
+      <div class="text-center p-8">
+        <svg class="w-24 h-24 mx-auto mb-4 text-cyan/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          {placeholderIcon === 'book' && (
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          )}
+          {placeholderIcon === 'building' && (
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+          )}
+          {placeholderIcon === 'filter' && (
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+          )}
+          {placeholderIcon === 'lightbulb' && (
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+          )}
+          {(placeholderIcon === 'default' || !['book', 'building', 'filter', 'lightbulb'].includes(placeholderIcon)) && (
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          )}
+        </svg>
+        <p class="text-white/50 text-sm">{placeholderText}</p>
+      </div>
+    </div>
+  )}
+</div>
+
+<script>
+  // Handle image load errors
+  document.addEventListener('DOMContentLoaded', () => {
+    const images = document.querySelectorAll('img[data-image-container="true"]');
+    
+    images.forEach((img) => {
+      // Handle image load errors
+      img.addEventListener('error', function(this: HTMLImageElement) {
+        // Hide the broken image
+        this.style.display = 'none';
+        
+        // Show the placeholder
+        const placeholder = this.parentElement?.querySelector('[data-placeholder="true"]');
+        if (placeholder) {
+          placeholder.classList.remove('hidden');
+          placeholder.classList.add('flex');
+        }
+      });
+    });
+  });
+</script>

@@ -1,0 +1,26 @@
+═══════════════════════════════════════════════════════════════
+  QUICK REFERENCE: Image File Names
+═══════════════════════════════════════════════════════════════
+
+Save your ChatGPT images with these EXACT file names:
+
+1. vision.jpg              → Image #1 (Four students with prosthetic hand)
+2. problem.jpg              → Image #2 (Three students coding with robot)
+3. who-we-are.jpg           → Image #6 (Maker space with labeled zones)
+4. facilities.jpg           → Image #6 (Same as above - best for facilities)
+5. what-students-learn.jpg  → Image #1 or Image #2 (Your choice)
+
+═══════════════════════════════════════════════════════════════
+  WHERE TO PLACE
+═══════════════════════════════════════════════════════════════
+
+All files go in: public/images/
+
+═══════════════════════════════════════════════════════════════
+  FORMAT
+═══════════════════════════════════════════════════════════════
+
+You can use either .jpg or .png format for any image.
+
+═══════════════════════════════════════════════════════════════
+

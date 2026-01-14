@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import Navigation from '../components/Navigation.astro';
 import Footer from '../components/Footer.astro';
+import { fonts } from '../config/fonts.ts';
 
 interface Props {
 	title?: string;
@@ -9,6 +10,9 @@ interface Props {
 }
 
 const { title = 'Tinkerz Space - Future Tech & Innovation Maker Space', description = 'A cutting-edge Maker Space where students learn by doing. Explore, Create, Innovate with Robotics, AI, Drone Tech, and Space Tech.' } = Astro.props;
+
+// Generate Google Fonts URL from config
+const googleFontsUrl = fonts.googleFonts.getUrl();
 ---
 
 <!doctype html>
@@ -25,7 +29,7 @@ const { title = 'Tinkerz Space - Future Tech & Innovation Maker Space', descript
 		<title>{title}</title>
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+		<link href={googleFontsUrl} rel="stylesheet">
 	</head>
 	<body>
 		<Navigation />
