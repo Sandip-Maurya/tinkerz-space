@@ -8,4 +8,9 @@ export default defineConfig({
 	output: 'static',
 	site: 'https://tinkerzspace.com',
 	base: '/',
+	image: {
+		service: {
+			entrypoint: 'astro/assets/services/sharp',
+		},
+	},
 });

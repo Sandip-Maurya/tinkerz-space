@@ -9,6 +9,24 @@
 import astroLogo from '../assets/astro.svg';
 import backgroundSvg from '../assets/background.svg';
 
+// Import content images for optimization
+import visionMobile from '../assets/images/vision-mobile.png';
+import visionTablet from '../assets/images/vision-tablet.png';
+import visionLaptop from '../assets/images/vision-laptop.png';
+import problemMobile from '../assets/images/problem-mobile.png';
+import problemTablet from '../assets/images/problem-tablet.png';
+import problemLaptop from '../assets/images/problem-laptop.png';
+import whoWeAreMobile from '../assets/images/who-we-are-mobile.png';
+import whoWeAreTablet from '../assets/images/who-we-are-tablet.png';
+import whoWeAreLaptop from '../assets/images/who-we-are-laptop.png';
+import facilitiesMobile from '../assets/images/facilities-mobile.png';
+import facilitiesTablet from '../assets/images/facilities-tablet.png';
+import facilitiesLaptop from '../assets/images/facilities-laptop.png';
+import whatStudentsLearnMobile from '../assets/images/what-students-learn-mobile.png';
+import whatStudentsLearnLaptop from '../assets/images/what-students-learn-laptop.png';
+// Note: Tablet version doesn't exist, using laptop version as fallback
+const whatStudentsLearnTablet = whatStudentsLearnLaptop;
+
 /**
  * Asset Registry
  * Organized by category for easy management
@@ -62,15 +80,15 @@ export const assets = {
   content: {
     vision: {
       mobile: {
-        src: '/images/vision-mobile.png',
+        src: visionMobile,
         aspectRatio: '9/16',
       },
       tablet: {
-        src: '/images/vision-tablet.png',
+        src: visionTablet,
         aspectRatio: '2/3',
       },
       laptop: {
-        src: '/images/vision-laptop.png',
+        src: visionLaptop,
         aspectRatio: '3/2',
       },
       alt: 'Student working on electronics',
@@ -79,15 +97,15 @@ export const assets = {
     },
     problem: {
       mobile: {
-        src: '/images/problem-mobile.png',
+        src: problemMobile,
         aspectRatio: '9/16',
       },
       tablet: {
-        src: '/images/problem-tablet.png',
+        src: problemTablet,
         aspectRatio: '1/1',
       },
       laptop: {
-        src: '/images/problem-laptop.png',
+        src: problemLaptop,
         aspectRatio: '3/2',
       },
       alt: 'Hands-on robotics project',
@@ -96,15 +114,15 @@ export const assets = {
     },
     whoWeAre: {
       mobile: {
-        src: '/images/who-we-are-mobile.png',
+        src: whoWeAreMobile,
         aspectRatio: '16/9',
       },
       tablet: {
-        src: '/images/who-we-are-tablet.png',
+        src: whoWeAreTablet,
         aspectRatio: '16/9',
       },
       laptop: {
-        src: '/images/who-we-are-laptop.png',
+        src: whoWeAreLaptop,
         aspectRatio: '16/9',
       },
       alt: 'Maker Space Environment',
@@ -113,15 +131,15 @@ export const assets = {
     },
     facilities: {
       mobile: {
-        src: '/images/facilities-mobile.png',
+        src: facilitiesMobile,
         aspectRatio: '9/16',
       },
       tablet: {
-        src: '/images/facilities-tablet.png',
+        src: facilitiesTablet,
         aspectRatio: '2/3',
       },
       laptop: {
-        src: '/images/facilities-laptop.png',
+        src: facilitiesLaptop,
         aspectRatio: '16/9',
       },
       alt: 'State-of-the-art facilities',
@@ -130,15 +148,15 @@ export const assets = {
     },
     whatStudentsLearn: {
       mobile: {
-        src: '/images/what-students-learn-mobile.png',
+        src: whatStudentsLearnMobile,
         aspectRatio: '9/16',
       },
       tablet: {
-        src: '/images/what-students-learn-tablet.png',
+        src: whatStudentsLearnTablet,
         aspectRatio: '1/1',
       },
       laptop: {
-        src: '/images/what-students-learn-laptop.png',
+        src: whatStudentsLearnLaptop,
         aspectRatio: '2/3',
       },
       alt: 'Hands-on learning experience',

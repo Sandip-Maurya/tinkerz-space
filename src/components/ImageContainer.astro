@@ -1,9 +1,11 @@
 ---
+import { Image, getImage, type ImageMetadata } from 'astro:assets';
+
 interface Props {
-  src?: string | null; // Fallback/single image (for backward compatibility)
-  srcMobile?: string | null;
-  srcTablet?: string | null;
-  srcLaptop?: string | null;
+  src?: string | ImageMetadata | null; // Fallback/single image (for backward compatibility)
+  srcMobile?: string | ImageMetadata | null;
+  srcTablet?: string | ImageMetadata | null;
+  srcLaptop?: string | ImageMetadata | null;
   alt?: string;
   placeholderText?: string;
   placeholderIcon?: 'book' | 'building' | 'filter' | 'lightbulb' | 'default';
@@ -33,13 +35,26 @@ const {
   containerClass = '',
 } = Astro.props;
 
+// Helper to check if value is an Astro ImageMetadata object
+const isImageMetadata = (val: any): val is ImageMetadata => {
+  return val && typeof val === 'object' && 'src' in val;
+};
+
+// Helper to get image metadata or string
+const getImageSource = (val: string | ImageMetadata | null | undefined): ImageMetadata | string | null => {
+  if (!val) return null;
+  if (isImageMetadata(val)) return val;
+  if (typeof val === 'string') return val;
+  return null;
+};
+
 // Determine if we have responsive images or single image
 const hasResponsiveImages = srcMobile || srcTablet || srcLaptop;
-const hasSingleImage = src && src.trim() !== '';
+const hasSingleImage = src;
 const hasImage = hasResponsiveImages || hasSingleImage;
 
-// Get fallback image for <img> tag - prioritize src, then responsive images
-const fallbackSrc = src || srcLaptop || srcTablet || srcMobile;
+// Get fallback image - prioritize src, then responsive images
+const fallbackImage = getImageSource(src) || getImageSource(srcLaptop) || getImageSource(srcTablet) || getImageSource(srcMobile);
 
 // Determine aspect ratios for each breakpoint
 const getAspectRatio = (breakpoint?: string) => {
@@ -80,6 +95,62 @@ const aspectRatioClass = aspectRatioClasses.length > 0
 const placeholderAspectRatio = defaultAspectRatio 
   ? `aspect-[${defaultAspectRatio}]` 
   : 'aspect-[4/3]';
+
+// Get image sources
+const mobileImage = getImageSource(srcMobile);
+const tabletImage = getImageSource(srcTablet);
+const laptopImage = getImageSource(srcLaptop);
+
+// Generate optimized image URLs for picture sources
+const getOptimizedImageUrl = async (img: ImageMetadata | string | null) => {
+  if (!img) return null;
+  if (isImageMetadata(img)) {
+    const optimized = await getImage({ 
+      src: img, 
+      format: 'webp',
+      width: img.width,
+      height: img.height,
+    });
+    return optimized.src;
+  }
+  return img;
+};
+
+const mobileImageUrl = mobileImage ? await getOptimizedImageUrl(mobileImage) : null;
+const tabletImageUrl = tabletImage ? await getOptimizedImageUrl(tabletImage) : null;
+const laptopImageUrl = laptopImage ? await getOptimizedImageUrl(laptopImage) : null;
+
+// Helper to extract width and height from aspect ratio string
+const parseAspectRatio = (ratio: string): { width: number; height: number } | null => {
+  const parts = ratio.split('/');
+  if (parts.length === 2) {
+    const width = parseInt(parts[0]);
+    const height = parseInt(parts[1]);
+    if (!isNaN(width) && !isNaN(height)) {
+      return { width, height };
+    }
+  }
+  return null;
+};
+
+// Calculate dimensions for images (used for optimization)
+const getImageDimensions = (image: ImageMetadata | string | null, aspectRatioStr?: string): { width?: number; height?: number } => {
+  if (isImageMetadata(image)) {
+    return { width: image.width, height: image.height };
+  }
+  if (aspectRatioStr) {
+    const ratio = parseAspectRatio(aspectRatioStr);
+    if (ratio) {
+      // Estimate dimensions based on aspect ratio (use reasonable defaults)
+      const baseWidth = 1200;
+      return {
+        width: baseWidth,
+        height: Math.round((baseWidth * ratio.height) / ratio.width),
+      };
+    }
+  }
+  return {};
+};
 ---
 
 <div class={`relative rounded-lg overflow-hidden border-2 border-cyan/30 bg-dark-blue/50 ${containerClass}`}>
@@ -90,48 +161,50 @@ const placeholderAspectRatio = defaultAspectRatio
     >
       {hasResponsiveImages ? (
         <picture>
-          {/* Mobile image */}
-          {srcMobile && (
+          {mobileImageUrl && (
             <source 
               media="(max-width: 767px)" 
-              srcset={srcMobile}
-              type={srcMobile.endsWith('.jpg') || srcMobile.endsWith('.jpeg') ? 'image/jpeg' : 'image/png'}
+              srcset={mobileImageUrl}
+              type="image/webp"
             />
           )}
-          {/* Tablet image */}
-          {srcTablet && (
+          {tabletImageUrl && (
             <source 
               media="(min-width: 768px) and (max-width: 1023px)" 
-              srcset={srcTablet}
-              type={srcTablet.endsWith('.jpg') || srcTablet.endsWith('.jpeg') ? 'image/jpeg' : 'image/png'}
+              srcset={tabletImageUrl}
+              type="image/webp"
             />
           )}
-          {/* Laptop image */}
-          {srcLaptop && (
+          {laptopImageUrl && (
             <source 
               media="(min-width: 1024px)" 
-              srcset={srcLaptop}
-              type={srcLaptop.endsWith('.jpg') || srcLaptop.endsWith('.jpeg') ? 'image/jpeg' : 'image/png'}
+              srcset={laptopImageUrl}
+              type="image/webp"
             />
           )}
-          {/* Fallback image */}
-          <img 
-            src={fallbackSrc!}
-            alt={alt}
-            class="w-full h-full object-cover"
-            loading="lazy"
-            data-image-container="true"
-          />
+          {fallbackImage && (
+            <Image
+              src={fallbackImage}
+              alt={alt}
+              class="w-full h-full object-cover"
+              loading="lazy"
+              data-image-container="true"
+              format="webp"
+              {...getImageDimensions(fallbackImage, defaultAspectRatio)}
+            />
+          )}
         </picture>
-      ) : (
-        <img 
-          src={src!}
+      ) : fallbackImage ? (
+        <Image
+          src={fallbackImage}
           alt={alt}
           class="w-full h-full object-cover"
           loading="lazy"
           data-image-container="true"
+          format="webp"
+          {...getImageDimensions(fallbackImage, defaultAspectRatio)}
         />
-      )}
+      ) : null}
       <!-- Fallback placeholder (hidden by default, shown on error) -->
       <div 
         class="hidden absolute inset-0 bg-gradient-to-br from-cyan/20 to-dark-blue-light flex items-center justify-center"
