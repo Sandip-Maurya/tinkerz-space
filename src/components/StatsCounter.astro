@@ -1,0 +1,115 @@
+---
+interface Props {
+  value: number;
+  suffix?: string;
+  label: string;
+  labelClass?: string;
+  valueClass?: string;
+}
+
+const {
+  value,
+  suffix = '',
+  label,
+  labelClass = '',
+  valueClass = '',
+} = Astro.props;
+---
+
+<div class="stat-item fade-in" data-value={value}>
+  <div class={`stat-value text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-cyan mb-2 ${valueClass}`}>
+    <span class="stat-number">0</span><span class="stat-suffix">{suffix}</span>
+  </div>
+  <div class={`stat-label text-white/70 text-xs sm:text-sm md:text-base font-medium uppercase tracking-wider whitespace-nowrap ${labelClass}`}>
+    {label}
+  </div>
+</div>
+
+<script>
+  // Animate counter when element becomes visible
+  document.addEventListener('DOMContentLoaded', () => {
+    const statItems = document.querySelectorAll('.stat-item');
+    
+    const animateCounter = (element: Element, targetValue: number, suffix: string) => {
+      const numberElement = element.querySelector('.stat-number') as HTMLElement;
+      if (!numberElement) return;
+      
+      const duration = 2000; // 2 seconds
+      const startTime = performance.now();
+      const startValue = 0;
+      
+      const animate = (currentTime: number) => {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        
+        // Easing function (ease-out)
+        const easeOut = 1 - Math.pow(1 - progress, 3);
+        const currentValue = Math.floor(startValue + (targetValue - startValue) * easeOut);
+        
+        numberElement.textContent = currentValue.toString();
+        
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        } else {
+          numberElement.textContent = targetValue.toString();
+        }
+      };
+      
+      requestAnimationFrame(animate);
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !entry.target.hasAttribute('data-animated')) {
+          entry.target.setAttribute('data-animated', 'true');
+          const statItem = entry.target as HTMLElement;
+          const suffixElement = statItem.querySelector('.stat-suffix');
+          const suffix = suffixElement?.textContent || '';
+          
+          // Extract value from data attribute
+          const valueAttr = statItem.getAttribute('data-value');
+          const targetValue = valueAttr ? parseInt(valueAttr) : 0;
+          
+          animateCounter(statItem, targetValue, suffix);
+        }
+      });
+    }, { threshold: 0.5 });
+    
+    statItems.forEach(item => {
+      observer.observe(item);
+    });
+  });
+</script>
+
+<style>
+  .stat-item {
+    text-align: center;
+    padding: 0.5rem;
+  }
+  
+  @media (min-width: 640px) {
+    .stat-item {
+      padding: 1rem;
+    }
+  }
+  
+  .stat-value {
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+  
+  .stat-number {
+    display: inline-block;
+  }
+  
+  .stat-suffix {
+    display: inline-block;
+    margin-left: 0.125rem;
+  }
+  
+  @media (prefers-reduced-motion: reduce) {
+    .stat-item {
+      transition: none;
+    }
+  }
+</style>

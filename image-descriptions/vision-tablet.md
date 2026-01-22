@@ -106,3 +106,4 @@
 - [ ] Image is sharp, clear, and professionally composed
 - [ ] sRGB color profile
 - [ ] People/faces match Indian/Pakistani/Bangladeshi origin appearance (if applicable)
+

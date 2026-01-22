@@ -22,6 +22,11 @@ jobs:
       - name: Checkout your repository using git
         uses: actions/checkout@v4
       
+      - name: Clear Astro cache (if exists)
+        run: |
+          rm -rf dist .astro
+          echo "Cache cleared"
+      
       - name: Install, build, and upload your site
         uses: withastro/action@v2
         with:

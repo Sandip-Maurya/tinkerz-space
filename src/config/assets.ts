@@ -26,6 +26,7 @@ import whatStudentsLearnMobile from '../assets/images/what-students-learn-mobile
 import whatStudentsLearnLaptop from '../assets/images/what-students-learn-laptop.png';
 // Note: Tablet version doesn't exist, using laptop version as fallback
 const whatStudentsLearnTablet = whatStudentsLearnLaptop;
+import heroFallbackImage from '../assets/images/hero.png';
 
 /**
  * Asset Registry
@@ -38,9 +39,22 @@ export const assets = {
    */
   backgrounds: {
     hero: {
-      type: 'pattern', // 'pattern' | 'image' | 'gradient'
+      type: 'pattern', // 'pattern' | 'image' | 'gradient' | 'video'
       description: 'Network pattern background for hero section',
       // Pattern is defined in CSS, no image path needed
+    },
+    heroVideo: {
+      type: 'video',
+      description: 'Video background for hero section',
+      mp4: '/videos/hero-background.mp4',
+      webm: '/videos/hero-background.webm',
+      poster: '/images/hero-video-poster.jpg', // Optional fallback image
+    },
+    heroFallback: {
+      type: 'image',
+      description: 'Fallback image for hero section background',
+      src: heroFallbackImage,
+      alt: 'Tinkerz Space Maker Space',
     },
     networkPattern: {
       type: 'pattern',

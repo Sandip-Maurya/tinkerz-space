@@ -26,7 +26,7 @@ const {
   alt = '',
   placeholderText = 'Image placeholder',
   placeholderIcon = 'default',
-  maxHeight = 'max-h-[400px] md:max-h-[500px] lg:max-h-[800px]',
+  maxHeight = 'max-h-none md:max-h-none lg:max-h-[800px]',
   aspectRatio,
   aspectRatioMobile,
   aspectRatioTablet,
@@ -53,8 +53,8 @@ const hasResponsiveImages = srcMobile || srcTablet || srcLaptop;
 const hasSingleImage = src;
 const hasImage = hasResponsiveImages || hasSingleImage;
 
-// Get fallback image - prioritize src, then responsive images
-const fallbackImage = getImageSource(src) || getImageSource(srcLaptop) || getImageSource(srcTablet) || getImageSource(srcMobile);
+// Get fallback image - prioritize src, then mobile (for better mobile experience), then other sizes
+const fallbackImage = getImageSource(src) || getImageSource(srcMobile) || getImageSource(srcTablet) || getImageSource(srcLaptop);
 
 // Determine aspect ratios for each breakpoint
 const getAspectRatio = (breakpoint?: string) => {
@@ -81,15 +81,17 @@ const laptopAspectRatio = getAspectRatio('laptop');
 const defaultAspectRatio = getAspectRatio();
 
 // Build CSS aspect ratio classes for responsive breakpoints
+// On mobile and tablet, we don't force aspect ratio to allow full image visibility
+// Aspect ratio is only applied on laptop and up to maintain layout consistency
 const aspectRatioClasses = [];
-if (mobileAspectRatio) aspectRatioClasses.push(`aspect-[${mobileAspectRatio}]`);
-if (tabletAspectRatio) aspectRatioClasses.push(`md:aspect-[${tabletAspectRatio}]`);
+// Mobile and tablet: no forced aspect ratio (let image display naturally)
+// Only apply aspect ratio on laptop and larger screens
 if (laptopAspectRatio) aspectRatioClasses.push(`lg:aspect-[${laptopAspectRatio}]`);
 
 const aspectRatioClass = aspectRatioClasses.length > 0 
   ? aspectRatioClasses.join(' ') 
   : defaultAspectRatio 
-    ? `aspect-[${defaultAspectRatio}]` 
+    ? `lg:aspect-[${defaultAspectRatio}]` 
     : '';
 
 const placeholderAspectRatio = defaultAspectRatio 
@@ -156,7 +158,7 @@ const getImageDimensions = (image: ImageMetadata | string | null, aspectRatioStr
 <div class={`relative rounded-lg overflow-hidden border-2 border-cyan/30 bg-dark-blue/50 ${containerClass}`}>
   {hasImage ? (
     <div 
-      class={`relative w-full ${maxHeight} ${aspectRatioClass || ''}`}
+      class={`relative w-full ${maxHeight} ${aspectRatioClass || ''} min-h-0 flex items-center justify-center`}
       data-image-wrapper="true"
     >
       {hasResponsiveImages ? (
@@ -186,7 +188,7 @@ const getImageDimensions = (image: ImageMetadata | string | null, aspectRatioStr
             <Image
               src={fallbackImage}
               alt={alt}
-              class="w-full h-full object-cover"
+              class="w-full h-auto max-h-full object-contain"
               loading="lazy"
               data-image-container="true"
               format="webp"
@@ -198,7 +200,7 @@ const getImageDimensions = (image: ImageMetadata | string | null, aspectRatioStr
         <Image
           src={fallbackImage}
           alt={alt}
-          class="w-full h-full object-cover"
+          class="w-full h-auto max-h-full object-contain"
           loading="lazy"
           data-image-container="true"
           format="webp"
