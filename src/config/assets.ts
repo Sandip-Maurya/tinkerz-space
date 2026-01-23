@@ -8,6 +8,8 @@
 // Import assets for static optimization (Astro will handle these)
 import astroLogo from '../assets/astro.svg';
 import backgroundSvg from '../assets/background.svg';
+import faviconImage from '../assets/images/favicon.jpg';
+import logoImage from '../assets/images/logo.jpg';
 
 // Import content images for optimization
 import visionMobile from '../assets/images/vision-mobile.png';
@@ -70,12 +72,12 @@ export const assets = {
    */
   icons: {
     logo: {
-      src: '/images/logo.svg',
+      src: logoImage,
       alt: 'Tinkerz Space Logo',
       description: 'Main logo/icon for the site',
     },
     favicon: {
-      src: '/favicon.svg',
+      src: faviconImage,
       alt: 'Tinkerz Space Favicon',
       description: 'Favicon for browser tab',
     },
